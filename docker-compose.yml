@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: crawlforge
+      POSTGRES_PASSWORD: crawlforge
+      POSTGRES_DB: crawlforge
+    volumes: [postgres-data:/var/lib/postgresql/data]
+    healthcheck: {test: ["CMD-SHELL", "pg_isready -U crawlforge -d crawlforge"], interval: 5s, timeout: 5s, retries: 10}
+  redis:
+    image: redis:7-alpine
+    healthcheck: {test: ["CMD", "redis-cli", "ping"], interval: 5s, timeout: 3s, retries: 10}
+  migrate:
+    build: {context: ., dockerfile: docker/api.Dockerfile}
+    command: ["alembic", "upgrade", "head"]
+    env_file: [.env]
+    depends_on: {postgres: {condition: service_healthy}}
+  api:
+    build: {context: ., dockerfile: docker/worker.Dockerfile}
+    env_file: [.env]
+    ports: ["8000:8000"]
+    depends_on: {migrate: {condition: service_completed_successfully}, redis: {condition: service_healthy}}
+  worker:
+    build: {context: ., dockerfile: docker/worker.Dockerfile}
+    env_file: [.env]
+    command: ["celery", "-A", "app.workers.celery_app.celery", "worker", "--loglevel=INFO", "--concurrency=2"]
+    depends_on: {migrate: {condition: service_completed_successfully}, redis: {condition: service_healthy}}
+    shm_size: 1gb
+  beat:
+    build: {context: ., dockerfile: docker/api.Dockerfile}
+    env_file: [.env]
+    command: ["celery", "-A", "app.workers.celery_app.celery", "beat", "--loglevel=INFO"]
+    depends_on: {migrate: {condition: service_completed_successfully}, redis: {condition: service_healthy}}
+  prometheus:
+    image: prom/prometheus:v3.2.1
+    profiles: [observability]
+    volumes: [./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro]
+    ports: ["9090:9090"]
+    depends_on: [api]
+  grafana:
+    image: grafana/grafana:11.5.2
+    profiles: [observability]
+    ports: ["3000:3000"]
+    volumes:
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on: [prometheus]
+volumes:
+  postgres-data:
+  redis-data:

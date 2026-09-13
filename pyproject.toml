@@ -1,0 +1,66 @@
+[project]
+name = "crawlforge"
+version = "0.1.0"
+description = "Responsible AI-powered distributed web extraction platform"
+requires-python = ">=3.12"
+dependencies = [
+  "alembic>=1.14,<2",
+  "beautifulsoup4>=4.12,<5",
+  "celery[redis]>=5.4,<6",
+  "fastapi>=0.115,<1",
+  "httpx>=0.28,<1",
+  "markdownify>=0.14,<1",
+  "opentelemetry-api>=1.29,<2",
+  "opentelemetry-instrumentation-fastapi>=0.50b0,<1",
+  "opentelemetry-sdk>=1.29,<2",
+  "openai>=1.68,<2",
+  "prometheus-client>=0.21,<1",
+  "protego>=0.3,<1",
+  "pydantic-settings>=2.6,<3",
+  "python-json-logger>=3.2,<4",
+  "jsonschema>=4.23,<5",
+  "redis>=5.2,<6",
+  "sqlalchemy[asyncio]>=2.0.36,<3",
+  "asyncpg>=0.30,<1",
+  "uvicorn[standard]>=0.34,<1",
+  "playwright>=1.50,<2",
+]
+
+[project.optional-dependencies]
+dev = [
+  "mypy>=1.15,<2",
+  "pytest>=8.3,<9",
+  "pytest-asyncio>=0.25,<1",
+  "pytest-cov>=6,<7",
+  "pytest-httpx>=0.35,<1",
+  "ruff>=0.9,<1",
+]
+
+[project.scripts]
+crawlforge = "app.cli:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+exclude = ["alembic/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "ASYNC"]
+ignore = ["B008", "ASYNC109"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = false
+check_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]

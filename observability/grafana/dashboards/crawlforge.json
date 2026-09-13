@@ -1,0 +1,1 @@
+{"title":"CrawlForge","schemaVersion":39,"panels":[{"type":"timeseries","title":"Request rate","targets":[{"expr":"sum(rate(crawlforge_requests_total[5m]))"}]},{"type":"timeseries","title":"Scrape latency","targets":[{"expr":"histogram_quantile(0.95, sum(rate(crawlforge_scrape_duration_seconds_bucket[5m])) by (le))"}]}]}
