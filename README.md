@@ -1,6 +1,7 @@
 # CrawlForge
 
 [![CI](https://github.com/HoosseinRahimi/crawlforge/actions/workflows/ci.yml/badge.svg)](https://github.com/HoosseinRahimi/crawlforge/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 CrawlForge is a responsible, AI-assisted distributed web extraction platform built as a portfolio-quality FastAPI service. It tries lightweight HTTP first, falls back to an isolated reusable Playwright browser when a page is JavaScript-dependent, cleans the DOM, emits Markdown, and can validate structured extraction through an LLM provider.
 
