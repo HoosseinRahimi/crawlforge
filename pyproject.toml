@@ -2,7 +2,7 @@
 name = "crawlforge"
 version = "0.1.0"
 description = "Responsible AI-powered distributed web extraction platform"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.15"
 dependencies = [
   "alembic>=1.14,<2",
   "beautifulsoup4>=4.12,<5",
