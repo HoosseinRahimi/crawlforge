@@ -2,8 +2,12 @@
 
 [![CI](https://github.com/HoosseinRahimi/crawlforge/actions/workflows/ci.yml/badge.svg)](https://github.com/HoosseinRahimi/crawlforge/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](pyproject.toml)
+[![Docker Compose](https://img.shields.io/badge/docker%20compose-ready-2496ED.svg)](docker-compose.yml)
 
-CrawlForge is a responsible, AI-assisted distributed web extraction platform built as a portfolio-quality FastAPI service. It tries lightweight HTTP first, falls back to an isolated reusable Playwright browser when a page is JavaScript-dependent, cleans the DOM, emits Markdown, and can validate structured extraction through an LLM provider.
+CrawlForge is a responsible, AI-assisted distributed web extraction platform: a FastAPI service with Celery workers that tries lightweight HTTP first, falls back to an isolated reusable Playwright browser when a page is JavaScript-dependent, cleans the DOM, emits Markdown, and can validate structured extraction through an LLM provider.
+
+Most scraping stacks optimise for reaching more pages. CrawlForge optimises for staying inside the limits of a site you are allowed to read. Every request — including the ones the browser makes — passes the same gates: URL validation, private-network and DNS-rebinding checks, redirect re-validation, and robots.txt enforcement. Failures are structured, quotas are per key, and each stage emits metrics and JSON logs.
 
 ## Features
 
@@ -32,9 +36,15 @@ flowchart TD
 
 ## Quick start
 
-```powershell
-Copy-Item .env.example .env
-# Replace API_KEY_PEPPER with a random secret.
+Requires Docker with Compose v2 and roughly 2–4 GiB of free RAM.
+
+```bash
+git clone https://github.com/HoosseinRahimi/crawlforge.git
+cd crawlforge
+
+cp .env.example .env          # PowerShell: Copy-Item .env.example .env
+# Then set API_KEY_PEPPER in .env to a random secret.
+
 docker compose up --build
 docker compose run --rm api crawlforge api-key create --name local
 ```
@@ -78,14 +88,8 @@ Benchmark numbers are intentionally omitted until a real run is recorded.
 
 ## Project structure
 
-`app/api` contains HTTP contracts, `app/scraper` the fetch/browser pipeline, `app/crawler` BFS traversal, `app/extractor` cleaning/Markdown, `app/llm` provider adapters, `app/workers` Celery tasks, `app/db` persistence, `app/security` URL checks, and `app/observability` metrics/logging.
+`app/api` contains HTTP contracts, `app/scraper` the fetch/browser pipeline, `app/crawler` BFS traversal, `app/extractor` cleaning/Markdown, `app/llm` provider adapters, `app/workers` Celery tasks, `app/db` persistence, `app/security` URL checks, and `app/observability` metrics/logging. Notes on the repository description and topics live in [`docs/REPO_METADATA.md`](docs/REPO_METADATA.md).
 
 ## Known limitations and roadmap
 
 Application-layer DNS checks cannot replace a production egress firewall. Binary document extraction, authenticated sessions, JavaScript action scripting, and durable object storage are not included in v1. Future work includes a dedicated egress proxy, richer crawl scheduling, object-store bodies, per-tenant dashboards, and additional LLM adapters.
-
-## GitHub metadata
-
-Suggested description: **Responsible AI-powered distributed web extraction with FastAPI, Celery, Playwright, SSRF protection, and structured outputs.**
-
-Suggested topics: `web-scraping`, `crawler`, `fastapi`, `celery`, `playwright`, `distributed-systems`, `postgresql`, `redis`, `prometheus`, `ai-extraction`.
