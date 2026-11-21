@@ -4,25 +4,25 @@ version = "0.1.0"
 description = "Responsible AI-powered distributed web extraction platform"
 requires-python = ">=3.12,<3.15"
 dependencies = [
-  "alembic>=1.14,<2",
+  "alembic>=1.20.1,<2",
   "beautifulsoup4>=4.12,<5",
   "celery[redis]>=5.4,<6",
-  "fastapi>=0.115,<1",
+  "fastapi>=0.163.2,<1",
   "httpx>=0.28,<1",
   "markdownify>=1.2.3,<2",
   "opentelemetry-api>=1.29,<2",
   "opentelemetry-instrumentation-fastapi>=0.50b0,<1",
-  "opentelemetry-sdk>=1.29,<2",
-  "openai>=3.53.0,<4",
+  "opentelemetry-sdk>=1.45.2,<2",
+  "openai>=3.55.0,<4",
   "prometheus-client>=0.21,<1",
-  "protego>=0.3,<1",
+  "protego>=0.7.0,<1",
   "pydantic-settings>=2.16.3,<3",
   "python-json-logger>=3.2,<4",
   "jsonschema>=4.23,<5",
   "redis>=5.2,<6",
-  "sqlalchemy[asyncio]>=2.0.36,<3",
+  "sqlalchemy[asyncio]>=2.1.9,<3",
   "asyncpg>=0.32.0,<1",
-  "uvicorn[standard]>=0.34,<1",
+  "uvicorn[standard]>=0.54.0,<1",
   "playwright>=1.65.2,<2",
 ]
 
@@ -33,7 +33,7 @@ dev = [
   "pytest-asyncio>=1.5.0,<2",
   "pytest-cov>=6,<7",
   "pytest-httpx>=0.35,<1",
-  "ruff>=0.9,<1",
+  "ruff>=0.17.5,<1",
 ]
 
 [project.scripts]
